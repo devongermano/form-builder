@@ -1,0 +1,35 @@
+
+.dndList {
+  transition: all 300ms ease;
+  padding: 5px;
+
+  .dndDragover {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+.dndDragging {
+  //@apply h-24 px-4 py-2 rounded-lg bg-white outline-none ring-0;
+  //overflow: hidden;
+  //transform: translate(0, 0);
+}
+
+.dndDraggingSource {
+  display: none;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 0 1fr 0;
+  transition: grid-template-columns 0.3s;
+}
+
+.grid-layout.sidebar-open {
+  grid-template-columns: auto 1fr auto;
+}
+
+.left-sidebar,
+.right-sidebar {
+  width: 16rem; /* Adjust the width to your preference */
+}

@@ -1,0 +1,104 @@
+
+<div class="grid-layout sidebar-open">
+  <div class="left-sidebar hidden lg:block">
+    <app-form-element-sidebar></app-form-element-sidebar>
+  </div>
+
+
+  <dts-select-container
+    #container="dts-select-container"
+    [(selectedItems)]="selectedItems"
+    (select)="someMethod($event)">
+
+  <div class="main-content bg-gray-200 h-screen overflow-y-auto">
+    <header class="bg-white shadow-sm p-4 flex items-center justify-between">
+      <!-- Form title and tags -->
+      <div class="flex items-center space-x-4">
+        <h1 class="text-xl font-semibold text-gray-600" [attr.contenteditable]="true">Form Title</h1>
+        <div class="flex space-x-1">
+          <span class="bg-blue-200 text-blue-600 text-xs py-0.5 px-1.5 rounded">Tag 1</span>
+          <span class="bg-green-200 text-green-600 text-xs py-0.5 px-1.5 rounded">Tag 2</span>
+          <span class="bg-red-200 text-red-600 text-xs py-0.5 px-1.5 rounded">Tag 3</span>
+        </div>
+      </div>
+
+      <!-- Active/Inactive switch and status -->
+      <div class="flex items-center space-x-4">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" value="" class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600"></div>
+          <span class="ml-3 text-sm font-medium text-gray-900">Active</span>
+        </label>
+
+        <!-- Save status -->
+        <div class="text-sm text-green-600 flex items-center space-x-1">
+          <span>Saving</span>
+          <svg class="fast-spin h-5 w-5" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Horizontal meatballs button -->
+      <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+      </button>
+
+      <!-- Dropdown menu -->
+      <div id="dropdownDots" class="hidden z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownMenuIconButton">
+          <li>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+          </li>
+          <li>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+          </li>
+          <li>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Earnings</a>
+          </li>
+        </ul>
+        <div class="py-2">
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Separated link</a>
+        </div>
+      </div>
+
+    </header>
+    <div class="centered-div mx-auto w-full lg:max-w-xl">
+      <div dndDropzone
+           (dndDrop)="onDrop($event, formElements)"
+           dndEffectAllowed="copyMove"
+           class="dndList bg-white rounded-xl shadow-md p-6 mt-20">
+
+        <div [style.height.px]="getPlaceholderHeight()"
+             class="dndPlaceholder bg-gray-50 outline-dashed outline-1 outline-gray-300" dndPlaceholderRef>
+        </div>
+
+        <ng-container *ngFor="let formElement of formElements">
+
+          <div [dtsSelectItem]="formElement" class="draggable relative"
+
+               [dndDisableIf]="formElement.draggable.disable"
+               [dndDraggable]="formElement"
+               [dndEffectAllowed]="formElement.draggable.effectAllowed"
+               (dndCanceled)="onDragged(formElement, formElements, 'none')"
+               (dndCopied)="onDragged(formElement, formElements, 'copy')"
+               (dndEnd)="onDragEnd($event)"
+               (dndLinked)="onDragged(formElement, formElements, 'link')"
+               (dndMoved)="onDragged(formElement, formElements, 'move')"
+               (dndStart)="onDragStart(formElement, $event)">
+            <app-form-element-container [formElement]="formElement"></app-form-element-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  </dts-select-container>
+  <div class="right-sidebar hidden lg:block">
+    <ng-container *ngIf="selectedElement">
+      <app-form-element-config-sidebar
+        [formElement]="selectedElement"
+      ></app-form-element-config-sidebar>
+    </ng-container>
+  </div>
+</div>
